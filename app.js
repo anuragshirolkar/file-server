@@ -1,8 +1,8 @@
 const express = require('express')
 const multer = require('multer')
-const ejs = require('ejs')
 const path = require('path')
-const { createBrotliCompress } = require('zlib')
+const fs = require('fs').promises
+const utils = require('./utils')
 
 // set storage engine
 const storage = multer.diskStorage({
@@ -23,7 +23,21 @@ app.use('/static', express.static('static'))
 const port = 3000
 app.listen(port, () => console.log(`server started on port ${port}`))
 
-app.get('/', (req, res) => res.sendFile('views/index.html', {root: __dirname }))
+app.get('*', async (req, res) => {
+    let path = req.params[0]
+    let childrenPaths = await fs.readdir('.' + path)
+    let children = await Promise.all(childrenPaths.map(child =>
+        fs.lstat('.' + path + "/" + child)
+            .then(stat => ({
+                name: child,
+                isDir: stat.isDirectory(),
+                size: utils.beautifySize(stat.size)
+            }))))
+    
+    console.log(children)
+
+    res.sendFile('views/index.html', { root: __dirname })
+})
 
 app.post('/upload', (req, res) => {
     upload(req, res, err => {
