@@ -1,7 +1,6 @@
 
-
 const uploadForm = document.getElementById('upload-form')
-const inpFile = document.getElementById('inp-file')
+const inpFile = document.getElementById('inp-files')
 const progressBarFill = document.querySelector('#progress-bar > .progress-bar-fill')
 const progressBarText = progressBarFill.querySelector('.progress-bar-text')
 
@@ -14,9 +13,11 @@ function uploadFile(e) {
 
     xhr.open('POST', '/upload')
     xhr.upload.addEventListener('progress', e => {
+      const percentage = e.lengthComputable ? (e.loaded / e.total) * 100 : 0
+      progressBarFill.style.width = percentage.toFixed(2) + "%"
+      progressBarText.textContent = percentage.toFixed(2) + "%"
         console.log(e)
     })
 
-    xhr.setRequestHeader('Content-Type', 'multipart/form-data')
     xhr.send(new FormData(uploadForm))
 }

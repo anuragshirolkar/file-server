@@ -18,12 +18,12 @@ const upload = multer({
 
 const app = express()
 
-app.use(express.static('./public'))
+app.use('/static', express.static('static'))
 
 const port = 3000
 app.listen(port, () => console.log(`server started on port ${port}`))
 
-app.get('/', (req, res) => res.sendFile('views/upload.html', {root: __dirname }))
+app.get('/', (req, res) => res.sendFile('views/index.html', {root: __dirname }))
 
 app.post('/upload', (req, res) => {
     upload(req, res, err => {
