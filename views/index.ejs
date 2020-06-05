@@ -39,18 +39,18 @@
       <input id="upload-button" type="submit" value="upload">
     </form>
 
+    <div id="progress-bar">
+      <div id="progress-bar-fill">
+        <span id="progress-bar-text">20%</span>
+      </div>
+    </div>
+
     <h3>Make Directory</h3>
     <form id="mkdir-form" enctype="application/json">
       <input type="text" name="dirname" id="dir-name-input">
       <input type="hidden" name="path" value="<%= path %>">
       <input id="mkdir-button" type="submit" value="mkdir">
     </form>
-
-    <div id="progress-bar">
-      <div id="progress-bar-fill">
-        <span id="progress-bar-text">20%</span>
-      </div>
-    </div>
 
     <div class="alert-success" id="upload-success-alert">
       File uploaded successfully!
