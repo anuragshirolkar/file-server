@@ -1,7 +1,7 @@
 {
-    "name": "upload",
+    "name": "http-file-server",
     "version": "1.0.0",
-    "description": "Example for image uploading in Node",
+    "description": "Http server with file upload and deleting",
     "main": "app.js",
     "scripts": {
       "start": "node app.js"

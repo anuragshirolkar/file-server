@@ -17,7 +17,7 @@ const storage = path => multer.diskStorage({
 
 const upload = path => multer({
     storage: storage(path)
-}).array('inp-files', 20)
+}).array('files', 20)
 
 const app = express()
 
@@ -60,7 +60,7 @@ app.put('*', (req, res) => {
             res.send(err)
         } else {
             console.log(req.file)
-            res.send('test')
+            res.sendStatus(200)
         }
     })
 })
@@ -75,12 +75,12 @@ app.delete('*', (req, res) => {
             }
             return fs.unlink(path)
         })
-        .then(v => res.send('success'))
+        .then(v => res.sendStatus(200))
 })
 
 app.post('/mkdir', (req, res) => {
     let path = 'public/uploads' + req.body.path + req.body.dirname
     console.log(path)
     fs.mkdir(path)
-        .then(result => res.send(''))
+        .then(result => res.sendStatus(200))
 })

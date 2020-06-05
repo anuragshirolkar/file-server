@@ -4,6 +4,8 @@
 <head>
   <link rel="stylesheet" href="/static/index.css">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <title>File server</title>
 </head>
 
 <body>
@@ -32,8 +34,8 @@
     </table>
 
     <h3>Upload File</h3>
-    <form class="form-inline" id="upload-form" enctype="multipart/form-data">
-      <input type="file" name="inp-files" id="inp-files" multiple>
+    <form id="upload-form" enctype="multipart/form-data">
+      <input type="file" name="files" id="inp-files" multiple style="width: 500px;">
       <input id="upload-button" type="submit" value="upload">
     </form>
 
