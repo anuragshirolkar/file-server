@@ -7,9 +7,11 @@ const utils = require('./utils')
 const bodyParser = require('body-parser')
 const pathUtil = require('path')
 
+fs.mkdir('public/uploads')
+
 // set storage engine
 const storage = path => multer.diskStorage({
-    destination: './public/uploads' + path,
+    destination: 'public/uploads' + path,
     filename: (req, file, callback) => {
         callback(null, file.originalname)
     }
