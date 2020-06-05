@@ -1,14 +1,7 @@
-  .progress-bar {
-    height: 35px;
-    width: 250px;
-    border: 2px solid darkblue;
-  }
+.size-column {
+  text-align: right;
+}
 
-  .progress-bar-fill {
-    height: 100%;
-    background: lightblue;
-    display: flex;
-    align-items: center;
-    transition: width 0.25s;
-
-  }
+.progress {
+  visibility: hidden;
+}

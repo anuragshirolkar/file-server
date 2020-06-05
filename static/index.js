@@ -1,23 +1,43 @@
 
 const uploadForm = document.getElementById('upload-form')
 const inpFile = document.getElementById('inp-files')
-const progressBarFill = document.querySelector('#progress-bar > .progress-bar-fill')
-const progressBarText = progressBarFill.querySelector('.progress-bar-text')
+const progress = document.querySelector("#progress")
+const progressBar = document.querySelector('#progress-bar')
+const successAlert = document.querySelector('#success-alert')
 
 uploadForm.addEventListener('submit', uploadFile)
 
 function uploadFile(e) {
     e.preventDefault()
 
+    console.log(e)
+
     const xhr = new XMLHttpRequest()
 
-    xhr.open('POST', '/upload')
+    progress.style.visibility = 'visible'
+
+    xhr.open('PUT', path)
     xhr.upload.addEventListener('progress', e => {
       const percentage = e.lengthComputable ? (e.loaded / e.total) * 100 : 0
-      progressBarFill.style.width = percentage.toFixed(2) + "%"
-      progressBarText.textContent = percentage.toFixed(2) + "%"
-        console.log(e)
+      progressBar.style.width = percentage.toFixed(2) + "%"
+      progressBar.setAttribute('aria-valuenow', percentage.toFixed(2))
+      progressBar.innerHTML = percentage.toFixed(2) + '%'
+    })
+
+    xhr.upload.addEventListener('load', e => {
+      progress.style.visibility = 'hidden'
+      successAlert.style.visibility = 'visible'
     })
 
     xhr.send(new FormData(uploadForm))
+}
+
+function deleteFile(filePath) {
+  console.log('deleting file: ' + filePath)
+  fetch(filePath, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(res => console.log(res))
 }
