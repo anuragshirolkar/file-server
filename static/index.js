@@ -1,9 +1,12 @@
 
 const uploadForm = document.getElementById('upload-form')
 const inpFile = document.getElementById('inp-files')
-const progress = document.querySelector("#progress")
-const progressBar = document.querySelector('#progress-bar')
-const successAlert = document.querySelector('#success-alert')
+const progressBar = document.querySelector("#progress-bar")
+const progressBarFill = document.querySelector('#progress-bar-fill')
+const progressBarText = document.querySelector('#progress-bar-text')
+const uploadSuccessAlert = document.querySelector('#upload-success-alert')
+const deleteSuccessAlert = document.querySelector('#delete-success-alert')
+const mkdirSuccessAlert = document.querySelector('#mkdir-success-alert')
 
 uploadForm.addEventListener('submit', uploadFile)
 
@@ -14,22 +17,37 @@ function uploadFile(e) {
 
     const xhr = new XMLHttpRequest()
 
-    progress.style.visibility = 'visible'
+    progressBar.style.display = 'block'
 
     xhr.open('PUT', path)
     xhr.upload.addEventListener('progress', e => {
       const percentage = e.lengthComputable ? (e.loaded / e.total) * 100 : 0
-      progressBar.style.width = percentage.toFixed(2) + "%"
-      progressBar.setAttribute('aria-valuenow', percentage.toFixed(2))
-      progressBar.innerHTML = percentage.toFixed(2) + '%'
+      progressBarFill.style.width = percentage.toFixed(2) + "%"
+      progressBarText.textContent = percentage.toFixed(2) + "%"
     })
 
     xhr.upload.addEventListener('load', e => {
-      progress.style.visibility = 'hidden'
-      successAlert.style.visibility = 'visible'
+      progressBar.style.display = 'none'
+      uploadSuccessAlert.style.display = 'block'
     })
 
     xhr.send(new FormData(uploadForm))
+}
+
+const mkdirForm = document.getElementById('mkdir-form')
+
+mkdirForm.addEventListener('submit', mkdir)
+
+function mkdir(e) {
+  console.log('called mkdir '+ new FormData(mkdirForm).entries().next().value)
+  e.preventDefault()
+  fetch('/mkdir', {
+    method: 'POST',
+    body: new URLSearchParams([...new FormData(mkdirForm).entries()]),
+  }).then(res => {
+    console.log(res)
+    mkdirSuccessAlert.style.display = 'block'
+  })
 }
 
 function deleteFile(filePath) {
@@ -39,5 +57,8 @@ function deleteFile(filePath) {
     headers: {
       'Content-Type': 'application/json'
     }
-  }).then(res => console.log(res))
+  }).then(res => {
+    console.log(res)
+    deleteSuccessAlert.style.display = 'block'
+  })
 }

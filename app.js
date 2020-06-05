@@ -5,6 +5,7 @@ const ejs = require('ejs')
 const fs = require('fs').promises
 const utils = require('./utils')
 const bodyParser = require('body-parser')
+const pathUtil = require('path')
 
 // set storage engine
 const storage = path => multer.diskStorage({
@@ -45,6 +46,7 @@ app.get('*', async (req, res) => {
     
 
     res.render('index', {
+        parent: path == '/' ? undefined : pathUtil.join(path, '..'),
         files: files,
         path: path
     })
@@ -66,6 +68,19 @@ app.put('*', (req, res) => {
 app.delete('*', (req, res) => {
     let path = 'public/uploads' + req.params[0]
     console.log('deleting file: ' + path)
-    fs.unlink(path)
+    fs.lstat(path)
+        .then(stat => {
+            if (stat.isDirectory()) {
+                return fs.rmdir(path)
+            }
+            return fs.unlink(path)
+        })
         .then(v => res.send('success'))
+})
+
+app.post('/mkdir', (req, res) => {
+    let path = 'public/uploads' + req.body.path + req.body.dirname
+    console.log(path)
+    fs.mkdir(path)
+        .then(result => res.send(''))
 })

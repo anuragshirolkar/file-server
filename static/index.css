@@ -2,6 +2,52 @@
   text-align: right;
 }
 
-.progress {
-  visibility: hidden;
+.file-name-column {
+  min-width: 400px;
+}
+
+#progress-bar {
+  border: 1px solid #00bbff;
+  background-color: white;
+  display: none;
+  margin-top: 10px;
+}
+
+#progress-bar-fill {
+  background: #99bbff;
+  display: flex;
+  transition: width 0.25s;
+}
+
+#progress-bar-text {
+  margin: 0 auto;
+}
+
+.container {
+  width: fit-content;
+  margin: 0 auto;
+  background-color: #f3f3f3;
+  padding: 20px;
+  height: auto;
+  font-size: large;
+  border: 1px solid #cccccc;
+  min-width: 500px;
+}
+
+td {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.alert-success {
+  padding: 10px;
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  display: none;
+  margin-top: 10px;
+}
+
+#upload-button {
+  float: right;
 }
