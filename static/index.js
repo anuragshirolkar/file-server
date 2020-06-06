@@ -13,13 +13,10 @@ uploadForm.addEventListener('submit', uploadFile)
 async function uploadFile(e) {
   e.preventDefault()
 
-
   // Simple get request to /authenticate before starting the upload.
   const authResponse = await fetch('/authenticate')
   if (authResponse.status == 401) return showAuthFailureMessage()
   else if (!authResponse.ok) return showGenericErrorMessage()
-
-  console.log(e)
 
   const xhr = new XMLHttpRequest()
 
