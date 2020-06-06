@@ -86,10 +86,8 @@ app.put('*', (req, res) => {
     let path = req.params[0]
     upload(path)(req, res, err => {
         if (err) {
-            console.log(err)
             res.send(err)
         } else {
-            console.log(req.file)
             res.sendStatus(200)
         }
     })
@@ -110,7 +108,6 @@ app.delete('*', (req, res) => {
     if (!authenticate(req)) return res.sendStatus(401)
 
     let path = 'public/uploads' + req.params[0]
-    console.log('deleting file: ' + path)
     recursiveRemove(path)
         .then(() => res.sendStatus(200))
 })
@@ -118,9 +115,7 @@ app.delete('*', (req, res) => {
 app.post('/mkdir', (req, res) => {
     if (!authenticate(req)) return res.sendStatus(401)
 
-    console.log(req.cookies)
     let path = 'public/uploads' + req.body.path + req.body.dirname
-    console.log(path)
     fs.mkdir(path)
         .then(result => res.sendStatus(200))
 })
