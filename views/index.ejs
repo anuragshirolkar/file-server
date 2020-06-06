@@ -28,12 +28,12 @@
         <% } %>
         <td class="size-column"> <%= file.isDir ? "" : file.size %> </td>
         <td class="file-name-column"> <a href="<%= path + file.name %>"> <%= file.name %> </a> </td>
-        <td> <button onclick="deleteFile('<%= path+file.name %>')"><i class="fa fa-times"></i></button> </td>
+        <td> <button onclick="deleteFile('<%= path+file.name %>')" style="color:red"><i class="fa fa-times"></i></button> </td>
       </tr>
       <% }) %>
     </table>
 
-    <h3>Upload File</h3>
+    <h4>Upload File</h4>
     <form id="upload-form" enctype="multipart/form-data">
       <input type="file" name="files" id="inp-files" multiple style="width: 500px;">
       <input id="upload-button" type="submit" value="upload">
@@ -45,27 +45,34 @@
       </div>
     </div>
 
-    <h3>Make Directory</h3>
+    <h4>Make Directory</h4>
     <form id="mkdir-form" enctype="application/json">
       <input type="text" name="dirname" id="dir-name-input">
       <input type="hidden" name="path" value="<%= path %>">
       <input id="mkdir-button" type="submit" value="mkdir">
     </form>
 
-    <div class="alert-success" id="upload-success-alert">
+    <h4>Update Password Cookie</h4>
+    <input type="text" id="password">
+    <button id="update-password-button" onclick="updatePassword()">update password cookie</button>
+
+    <div class="alert alert-success" id="upload-success-alert">
       File uploaded successfully!
       <button onclick="location.reload()">Reload</button>
     </div>
 
-    <div class="alert-success" id="delete-success-alert">
+    <div class="alert alert-success" id="delete-success-alert">
       File deleted successfully!
       <button onclick="location.reload()">Reload</button>
     </div>
 
-    <div class="alert-success" id="mkdir-success-alert">
+    <div class="alert alert-success" id="mkdir-success-alert">
       Directory created successfully!
       <button onclick="location.reload()">Reload</button>
     </div>
+
+    <div class="alert alert-danger" id="error-alert"></div>
+    <div class="alert alert-success" id="success-alert">X</div>
 
   </div>
 

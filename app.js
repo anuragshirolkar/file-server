@@ -6,6 +6,9 @@ const fs = require('fs').promises
 const utils = require('./utils')
 const bodyParser = require('body-parser')
 const pathUtil = require('path')
+const cookieParser = require("cookie-parser")
+
+const password = 'passwd'
 
 fs.mkdir('public')
     .then(v => fs.mkdir('public/uploads'))
@@ -28,6 +31,7 @@ const app = express()
 app.set('view engine', 'ejs')
 app.use(bodyParser.json()) // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })) // support encoded bodies
+app.use(cookieParser())
 
 app.use('/static', express.static('static'))
 app.use('/', express.static('public/uploads'))
@@ -83,6 +87,7 @@ app.delete('*', (req, res) => {
 })
 
 app.post('/mkdir', (req, res) => {
+    console.log(req.cookies)
     let path = 'public/uploads' + req.body.path + req.body.dirname
     console.log(path)
     fs.mkdir(path)

@@ -11,27 +11,27 @@ const mkdirSuccessAlert = document.querySelector('#mkdir-success-alert')
 uploadForm.addEventListener('submit', uploadFile)
 
 function uploadFile(e) {
-    e.preventDefault()
+  e.preventDefault()
 
-    console.log(e)
+  console.log(e)
 
-    const xhr = new XMLHttpRequest()
+  const xhr = new XMLHttpRequest()
 
-    progressBar.style.display = 'block'
+  progressBar.style.display = 'block'
 
-    xhr.open('PUT', path)
-    xhr.upload.addEventListener('progress', e => {
-      const percentage = e.lengthComputable ? (e.loaded / e.total) * 100 : 0
-      progressBarFill.style.width = percentage.toFixed(2) + "%"
-      progressBarText.textContent = percentage.toFixed(2) + "%"
-    })
+  xhr.open('PUT', path)
+  xhr.upload.addEventListener('progress', e => {
+    const percentage = e.lengthComputable ? (e.loaded / e.total) * 100 : 0
+    progressBarFill.style.width = percentage.toFixed(2) + "%"
+    progressBarText.textContent = percentage.toFixed(2) + "%"
+  })
 
-    xhr.upload.addEventListener('load', e => {
-      progressBar.style.display = 'none'
-      uploadSuccessAlert.style.display = 'block'
-    })
+  xhr.upload.addEventListener('load', e => {
+    progressBar.style.display = 'none'
+    uploadSuccessAlert.style.display = 'block'
+  })
 
-    xhr.send(new FormData(uploadForm))
+  xhr.send(new FormData(uploadForm))
 }
 
 const mkdirForm = document.getElementById('mkdir-form')
@@ -39,7 +39,7 @@ const mkdirForm = document.getElementById('mkdir-form')
 mkdirForm.addEventListener('submit', mkdir)
 
 function mkdir(e) {
-  console.log('called mkdir '+ new FormData(mkdirForm).entries().next().value)
+  console.log('called mkdir ' + new FormData(mkdirForm).entries().next().value)
   e.preventDefault()
   fetch('/mkdir', {
     method: 'POST',
@@ -62,3 +62,42 @@ function deleteFile(filePath) {
     deleteSuccessAlert.style.display = 'block'
   })
 }
+
+function getPassword() {
+  return document.cookie
+    .split(';')
+    .map(cookie => cookie.split('='))
+    .reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {})
+    .password
+}
+
+function setPassword(password) {
+  document.cookie = `password=${password}`
+}
+
+function updatePassword() {
+  const password = document.getElementById('password')
+  if (password.value == '') {
+    showError("Can't set empty password")
+    return 
+  }
+  setPassword(password.value)
+  password.value = ''
+  showSuccess('Password updated!')
+}
+
+function showAlert(id) {
+  const alert = document.getElementById(id)
+  let timeoutHandle;
+  function go(str) {
+    console.log(alert)
+    alert.innerText = str
+    alert.style.display = 'block'
+    if (timeoutHandle) clearTimeout(timeoutHandle)
+    timeoutHandle = setTimeout(() => alert.style.display = 'none', 5000)
+  }
+  return go
+}
+
+const showError = showAlert('error-alert')
+const showSuccess = showAlert('success-alert')
