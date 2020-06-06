@@ -1,13 +1,4 @@
-
 const uploadForm = document.getElementById('upload-form')
-const inpFile = document.getElementById('inp-files')
-const progressBar = document.querySelector("#progress-bar")
-const progressBarFill = document.querySelector('#progress-bar-fill')
-const progressBarText = document.querySelector('#progress-bar-text')
-const uploadSuccessAlert = document.querySelector('#upload-success-alert')
-const deleteSuccessAlert = document.querySelector('#delete-success-alert')
-const mkdirSuccessAlert = document.querySelector('#mkdir-success-alert')
-
 uploadForm.addEventListener('submit', uploadFile)
 
 async function uploadFile(e) {
@@ -20,21 +11,34 @@ async function uploadFile(e) {
 
   const xhr = new XMLHttpRequest()
 
-  progressBar.style.display = 'block'
+  showProgress(0)
 
   xhr.open('PUT', path)
   xhr.upload.addEventListener('progress', e => {
     const percentage = e.lengthComputable ? (e.loaded / e.total) * 100 : 0
-    progressBarFill.style.width = percentage.toFixed(2) + "%"
-    progressBarText.textContent = percentage.toFixed(2) + "%"
+    showProgress(percentage)
   })
 
   xhr.upload.addEventListener('load', e => {
-    progressBar.style.display = 'none'
-    uploadSuccessAlert.style.display = 'block'
+    hideProgressBar()
+    showAlertById('upload-success-alert')
   })
 
   xhr.send(new FormData(uploadForm))
+}
+
+function showProgress(percentage) {
+  const progressBar = document.querySelector("#progress-bar")
+  const progressBarFill = document.querySelector('#progress-bar-fill')
+  const progressBarText = document.querySelector('#progress-bar-text')
+
+  progressBar.style.display = 'block'
+  progressBarFill.style.width = percentage.toFixed(2) + "%"
+  progressBarText.textContent = percentage.toFixed(2) + "%"
+}
+
+function hideProgressBar() {
+  document.querySelector("#progress-bar").style.display = 'none'
 }
 
 const mkdirForm = document.getElementById('mkdir-form')
@@ -48,7 +52,7 @@ function mkdir(e) {
     method: 'POST',
     body: new URLSearchParams([...new FormData(mkdirForm).entries()]),
   }).then(res => {
-    if (res.ok) mkdirSuccessAlert.style.display = 'block'
+    if (res.ok) showAlertById('mkdir-success-alert')
     else if (res.status == 401) showAuthFailureMessage()
     else showGenericErrorMessage()
   })
@@ -62,7 +66,7 @@ function deleteFile(filePath) {
       'Content-Type': 'application/json'
     }
   }).then(res => {
-    if (res.ok) deleteSuccessAlert.style.display = 'block'
+    if (res.ok) showAlertById('delete-success-alert')
     else if (res.status == 401) showAuthFailureMessage()
     else showGenericErrorMessage()
   })
@@ -117,4 +121,8 @@ function showAuthFailureMessage() {
 
 function showGenericErrorMessage() {
   showError('Something went wrong.')
+}
+
+function showAlertById(id) {
+  document.getElementById(id).style.display = 'block'
 }
