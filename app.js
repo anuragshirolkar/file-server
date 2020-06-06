@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 const pathUtil = require('path')
 const cookieParser = require("cookie-parser")
 
-const password = 'passwd'
+const PASSWORD = 'passwd'
 
 fs.mkdir('public')
     .then(v => fs.mkdir('public/uploads'))
@@ -60,7 +60,14 @@ app.get('*', async (req, res) => {
     })
 })
 
+function authenticate(req) {
+    if (!req.cookies.password) return false
+    return req.cookies.password == PASSWORD
+}
+
 app.put('*', (req, res) => {
+    if (!authenticate(req)) return res.sendStatus(401)
+
     let path = req.params[0]
     upload(path)(req, res, err => {
         if (err) {
@@ -74,6 +81,8 @@ app.put('*', (req, res) => {
 })
 
 app.delete('*', (req, res) => {
+    if (!authenticate(req)) return res.sendStatus(401)
+
     let path = 'public/uploads' + req.params[0]
     console.log('deleting file: ' + path)
     fs.lstat(path)
@@ -87,6 +96,8 @@ app.delete('*', (req, res) => {
 })
 
 app.post('/mkdir', (req, res) => {
+    if (!authenticate(req)) return res.sendStatus(401)
+    
     console.log(req.cookies)
     let path = 'public/uploads' + req.body.path + req.body.dirname
     console.log(path)

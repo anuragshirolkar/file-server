@@ -45,8 +45,9 @@ function mkdir(e) {
     method: 'POST',
     body: new URLSearchParams([...new FormData(mkdirForm).entries()]),
   }).then(res => {
-    console.log(res)
-    mkdirSuccessAlert.style.display = 'block'
+    if (res.ok) mkdirSuccessAlert.style.display = 'block'
+    else if (res.status == 401) showAuthFailureMessage()
+    else showGenericErrorMessage()
   })
 }
 
@@ -58,8 +59,9 @@ function deleteFile(filePath) {
       'Content-Type': 'application/json'
     }
   }).then(res => {
-    console.log(res)
-    deleteSuccessAlert.style.display = 'block'
+    if (res.ok) deleteSuccessAlert.style.display = 'block'
+    else if (res.status == 401) showAuthFailureMessage()
+    else showGenericErrorMessage()
   })
 }
 
@@ -101,3 +103,11 @@ function showAlert(id) {
 
 const showError = showAlert('error-alert')
 const showSuccess = showAlert('success-alert')
+
+function showAuthFailureMessage() {
+  showError('Authentication failed. Set the right password.')
+}
+
+function showGenericErrorMessage() {
+  showError('Something went wrong.')
+}
