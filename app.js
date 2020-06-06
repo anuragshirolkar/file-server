@@ -7,8 +7,16 @@ const utils = require('./utils')
 const bodyParser = require('body-parser')
 const pathUtil = require('path')
 const cookieParser = require("cookie-parser")
+const crypto = require('crypto')
 
-const PASSWORD = 'passwd'
+const PASSWORD_HASH = '68be87fbc06fb0b3251341b6adec4680aab91b1a'
+
+function hash(str) {
+    return crypto.createHmac('sha1', '')
+        .update(str)
+        .digest('hex')
+}
+
 
 fs.mkdir('public')
     .then(v => fs.mkdir('public/uploads'))
@@ -46,6 +54,7 @@ app.get('/authenticate', (req, res) => {
 })
 
 app.get('*', async (req, res) => {
+
     let path = req.params[0]
     let relPath = 'public/uploads' + path
     let childrenPaths = await fs.readdir(relPath)
@@ -56,7 +65,7 @@ app.get('*', async (req, res) => {
                 isDir: stat.isDirectory(),
                 size: utils.beautifySize(stat.size)
             }))))
-    
+
 
     res.render('index', {
         parent: path == '/' ? undefined : pathUtil.join(path, '..'),
@@ -67,7 +76,7 @@ app.get('*', async (req, res) => {
 
 function authenticate(req) {
     if (!req.cookies.password) return false
-    return req.cookies.password == PASSWORD
+    return hash(req.cookies.password) == PASSWORD_HASH
 }
 
 app.put('*', (req, res) => {
