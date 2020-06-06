@@ -93,7 +93,7 @@ function getPassword() {
 }
 
 function setPassword(password) {
-  document.cookie = `password=${password}`
+  document.cookie = `password=${password}; path=/`
 }
 
 function updatePassword() {
