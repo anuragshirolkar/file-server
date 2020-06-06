@@ -56,10 +56,9 @@ app.get('/authenticate', (req, res) => {
 })
 
 app.get('*', async (req, res) => {
-
     let path = req.params[0]
     let relPath = 'public/uploads' + path
-    let childrenPaths = await fs.readdir(relPath)
+    let childrenPaths = await fs.readdir(relPath).catch(() => res.sendStatus(404))
     let files = await Promise.all(childrenPaths.map(child =>
         fs.lstat(relPath + '/' + child)
             .then(stat => ({
@@ -67,7 +66,6 @@ app.get('*', async (req, res) => {
                 isDir: stat.isDirectory(),
                 size: utils.beautifySize(stat.size)
             }))))
-
 
     res.render('index', {
         parent: path == '/' ? undefined : pathUtil.join(path, '..'),
@@ -102,12 +100,9 @@ async function recursiveRemove(path) {
     if (!stat.isDirectory()) {
         return fs.unlink(path)
     }
-    let dir = await fs.opendir(path)
-    var entry = await dir.read()
-    while(entry) {
-        await recursiveRemove(pathUtil.join(path, entry.name))
-        entry = await dir.read()
-    }
+    let children = await fs.readdir(path)
+    await Promise.all(
+        children.map(child => recursiveRemove(pathUtil.join(path, child))))
     fs.rmdir(path)
 }
 
