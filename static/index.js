@@ -91,6 +91,10 @@ function updatePassword() {
   showSuccess('Password updated!')
 }
 
+function resetPassword() {
+  setPassword('')
+}
+
 function showAlert(id) {
   const alert = document.getElementById(id)
   let timeoutHandle;
