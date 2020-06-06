@@ -118,4 +118,8 @@ app.post('/mkdir', (req, res) => {
     let path = 'public/uploads' + req.body.path + req.body.dirname
     fs.mkdir(path)
         .then(result => res.sendStatus(200))
+        .catch(reason => {
+            if (reason.code == 'EEXIST') return res.sendStatus(200)
+            return res.sendStatus(500)
+        })
 })
