@@ -58,18 +58,27 @@ function mkdir(e) {
   })
 }
 
-function deleteFile(filePath) {
-  console.log('deleting file: ' + filePath)
-  fetch(filePath, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  }).then(res => {
-    if (res.ok) showAlertById('delete-success-alert')
-    else if (res.status == 401) showAuthFailureMessage()
-    else showGenericErrorMessage()
-  })
+function deleteSelected() {
+  console.log('called deleteSelected')
+  var checkboxes = Array.from(document.getElementsByClassName('delete-checkbox'))
+  Promise.all(checkboxes
+    .filter(cb => cb.checked)
+    .map(cb => cb.value)
+    .map(path => {console.log(path); return path})
+    .map(path => deleteFile(path)))
+    .then(([res]) => {
+      if (res.ok) showAlertById('delete-success-alert')
+      else if (res.status == 401) showAuthFailureMessage()
+    }).catch(() => showGenericErrorMessage())
+  
+  function deleteFile(path) {
+    return fetch(path, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
 }
 
 function getPassword() {

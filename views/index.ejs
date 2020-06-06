@@ -28,9 +28,15 @@
         <% } %>
         <td class="size-column"> <%= file.isDir ? "" : file.size %> </td>
         <td class="file-name-column"> <a href="<%= path + file.name %>"> <%= file.name %> </a> </td>
-        <td> <button onclick="deleteFile('<%= path+file.name %>')" style="color:red"><i class="fa fa-times"></i></button> </td>
+        <td> <input class="delete-checkbox" type="checkbox" value="<%= path + file.name %>"> </td>
       </tr>
       <% }) %>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td> <button onclick="deleteSelected()"> <i class="fa fa-trash"></i> </button> </td>
+      </tr>
     </table>
 
     <h4>Upload File</h4>
