@@ -138,3 +138,15 @@ function showGenericErrorMessage() {
 function showAlertById(id) {
   document.getElementById(id).style.display = 'block'
 }
+
+const toggleAll = (() => {
+  var state = false
+
+  function go() {
+    state = !state
+    var checkboxes = Array.from(document.getElementsByClassName('delete-checkbox'))
+    checkboxes.forEach(cb => cb.checked = state)
+  }
+
+  return go
+})()

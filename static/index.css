@@ -6,6 +6,10 @@
   min-width: 400px;
 }
 
+.checkbox-column {
+  text-align: center;
+}
+
 #progress-bar {
   border: 1px solid #00bbff;
   background-color: white;

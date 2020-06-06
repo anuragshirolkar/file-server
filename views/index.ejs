@@ -12,12 +12,18 @@
   <div class="container">
     <h1> Directory: <%= path %> </h1>
     <table>
+      <tr>
+        <td></td>
+        <td></td>
+        <td class="file-name-column"></td>
+        <td class="checkbox-column"> <button onclick="toggleAll()">toggle</button> </td>
+      </tr>
       <% if(parent) { %>
         <tr>
           <td> <i class="fa fa-folder-open"></i> </td>
           <td></td>
           <td class="file-name-column"> <a href="<%= parent %>"> .. </a> </td>
-          <td></td>
+          <td class="checkbox-column"></td>
         </tr>
       <% } %>
       <% files.forEach(file => { %>
@@ -29,14 +35,14 @@
         <% } %>
         <td class="size-column"> <%= file.isDir ? "" : file.size %> </td>
         <td class="file-name-column"> <a href="<%= path + file.name %>"> <%= file.name %> </a> </td>
-        <td> <input class="delete-checkbox" type="checkbox" value="<%= path + file.name %>"> </td>
+        <td class="checkbox-column"> <input class="delete-checkbox" type="checkbox" value="<%= path + file.name %>"> </td>
       </tr>
       <% }) %>
       <tr>
         <td></td>
         <td></td>
         <td class="file-name-column"></td>
-        <td> <button onclick="deleteSelected()"> <i class="fa fa-trash"></i> </button> </td>
+        <td class="checkbox-column"> <button onclick="deleteSelected()"> <i class="fa fa-trash"></i> </button> </td>
       </tr>
     </table>
 
