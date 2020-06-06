@@ -59,10 +59,13 @@ function mkdir(e) {
 }
 
 function deleteSelected() {
-  console.log('called deleteSelected')
   var checkboxes = Array.from(document.getElementsByClassName('delete-checkbox'))
-  Promise.all(checkboxes
-    .filter(cb => cb.checked)
+  var selected = checkboxes.filter(cb => cb.checked)
+  if (selected.length == 0) {
+    showError("No file selected.")
+    return
+  }
+  Promise.all(selected
     .map(cb => cb.value)
     .map(path => {console.log(path); return path})
     .map(path => deleteFile(path)))

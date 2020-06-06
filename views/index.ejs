@@ -16,7 +16,8 @@
         <tr>
           <td> <i class="fa fa-folder-open"></i> </td>
           <td></td>
-          <td> <a href="<%= parent %>"> .. </a> </td>
+          <td class="file-name-column"> <a href="<%= parent %>"> .. </a> </td>
+          <td></td>
         </tr>
       <% } %>
       <% files.forEach(file => { %>
@@ -34,7 +35,7 @@
       <tr>
         <td></td>
         <td></td>
-        <td></td>
+        <td class="file-name-column"></td>
         <td> <button onclick="deleteSelected()"> <i class="fa fa-trash"></i> </button> </td>
       </tr>
     </table>
