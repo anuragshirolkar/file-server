@@ -10,8 +10,14 @@ const mkdirSuccessAlert = document.querySelector('#mkdir-success-alert')
 
 uploadForm.addEventListener('submit', uploadFile)
 
-function uploadFile(e) {
+async function uploadFile(e) {
   e.preventDefault()
+
+
+  // Simple get request to /authenticate before starting the upload.
+  const authResponse = await fetch('/authenticate')
+  if (authResponse.status == 401) return showAuthFailureMessage()
+  else if (!authResponse.ok) return showGenericErrorMessage()
 
   console.log(e)
 

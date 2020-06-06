@@ -40,6 +40,11 @@ const port = 3000
 app.listen(port, () => console.log(`server started on port ${port}`))
 
 
+app.get('/authenticate', (req, res) => {
+    if (!authenticate(req)) return res.sendStatus(401)
+    res.sendStatus(200)
+})
+
 app.get('*', async (req, res) => {
     let path = req.params[0]
     let relPath = 'public/uploads' + path
@@ -97,7 +102,7 @@ app.delete('*', (req, res) => {
 
 app.post('/mkdir', (req, res) => {
     if (!authenticate(req)) return res.sendStatus(401)
-    
+
     console.log(req.cookies)
     let path = 'public/uploads' + req.body.path + req.body.dirname
     console.log(path)
