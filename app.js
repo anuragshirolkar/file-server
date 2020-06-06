@@ -1,6 +1,5 @@
 const express = require('express')
 const multer = require('multer')
-const path = require('path')
 const ejs = require('ejs')
 const fs = require('fs').promises
 const utils = require('./utils')
@@ -98,19 +97,27 @@ app.put('*', (req, res) => {
     })
 })
 
+async function recursiveRemove(path) {
+    let stat = await fs.lstat(path)
+    if (!stat.isDirectory()) {
+        return fs.unlink(path)
+    }
+    let dir = await fs.opendir(path)
+    var entry = await dir.read()
+    while(entry) {
+        await recursiveRemove(pathUtil.join(path, entry.name))
+        entry = await dir.read()
+    }
+    fs.rmdir(path)
+}
+
 app.delete('*', (req, res) => {
     if (!authenticate(req)) return res.sendStatus(401)
 
     let path = 'public/uploads' + req.params[0]
     console.log('deleting file: ' + path)
-    fs.lstat(path)
-        .then(stat => {
-            if (stat.isDirectory()) {
-                return fs.rmdir(path)
-            }
-            return fs.unlink(path)
-        })
-        .then(v => res.sendStatus(200))
+    recursiveRemove(path)
+        .then(() => res.sendStatus(200))
 })
 
 app.post('/mkdir', (req, res) => {
