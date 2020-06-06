@@ -9,7 +9,10 @@ const pathUtil = require('path')
 const cookieParser = require("cookie-parser")
 const crypto = require('crypto')
 
-const PASSWORD_HASH = '68be87fbc06fb0b3251341b6adec4680aab91b1a'
+let PASSWORD_HASH
+fs.readFile('password.txt')
+    .then(buffer => PASSWORD_HASH = buffer.toString())
+    .catch(err => PASSWORD_HASH = hash(''))
 
 function hash(str) {
     return crypto.createHmac('sha1', '')
@@ -75,6 +78,7 @@ app.get('*', async (req, res) => {
 })
 
 function authenticate(req) {
+    if (hash('') == PASSWORD_HASH) return true
     if (!req.cookies.password) return false
     return hash(req.cookies.password) == PASSWORD_HASH
 }
